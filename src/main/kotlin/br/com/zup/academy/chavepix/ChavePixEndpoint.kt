@@ -76,14 +76,7 @@ open class ChavePixEndpoint(
                     .asRuntimeException()
             )
             return
-        } catch (validationException: ValidationException) {
-            responseObserver.onError(
-                Status.INVALID_ARGUMENT
-                    .withDescription(validationException.localizedMessage)
-                    .asRuntimeException()
-            )
-            return
-        } catch (clienteNaoEncontradoException: ClienteNaoEncontradoException) {
+        }catch (clienteNaoEncontradoException: ClienteNaoEncontradoException) {
             responseObserver.onError(
                 Status.NOT_FOUND
                     .withDescription(clienteNaoEncontradoException.message)
