@@ -7,24 +7,18 @@ import javax.persistence.*
 class Conta(
     @Enumerated(EnumType.STRING)
     @Column(nullable = false) val tipo: TipoConta,
-    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.MERGE])
+    @ManyToOne(fetch = FetchType.EAGER)
     val instituicao: Instituicao,
     @Column(nullable = false) val agencia: String,
     @Column(nullable = false) val numero: String,
-    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.MERGE])
+    @ManyToOne(fetch = FetchType.EAGER)
     val titular: Titular
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
-
-    @OneToMany(mappedBy = "conta", cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "conta", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var chaves: List<ChavePix>? = null
-
-    override fun toString(): String {
-        return "Conta(tipo=$tipo, instituicao=$instituicao, agencia='$agencia', numero='$numero', titular=$titular, id=$id, chaves=$chaves)"
-    }
-
 
 }

@@ -14,7 +14,10 @@ import javax.validation.constraints.NotBlank
 
 @Validated
 @Singleton
-class ExcluirChavePixService(@Inject val chavePixRepository: ChavePixRepository) {
+class ExcluirChavePixService(
+    @Inject val chavePixRepository: ChavePixRepository
+
+    ) {
 
     @Transactional
     fun excluirChavePix(
@@ -23,7 +26,6 @@ class ExcluirChavePixService(@Inject val chavePixRepository: ChavePixRepository)
     ){
         val uuidClienteId = UUID.fromString(clienteIdRequest)
         val pixId = UUID.fromString(pixIdRequest)
-
         val existeChave = chavePixRepository.findById(pixId)
         if (existeChave.isEmpty) throw ChavePixInexistenteException("Chave pix não encontrada pelo id: $pixId ")
         if (existeChave.get().conta.titular.id != uuidClienteId) throw PermissaoNegadaException("Permissão negada para o recurso.")

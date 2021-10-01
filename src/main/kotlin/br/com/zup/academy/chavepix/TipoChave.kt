@@ -5,5 +5,4 @@ enum class TipoChave {
     CELULAR,
     EMAIL,
     ALEATORIA
-
 }

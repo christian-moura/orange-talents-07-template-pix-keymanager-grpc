@@ -6,6 +6,5 @@ import java.util.*
 
 @Repository
 interface ChavePixRepository : JpaRepository<ChavePix, UUID> {
-
     fun findByValorChave( valorChave: String): Optional<ChavePix>
 }
