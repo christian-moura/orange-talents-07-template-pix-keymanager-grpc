@@ -1,7 +1,7 @@
 package br.com.zup.academy.shared.validation
 
 
-import br.com.zup.academy.chavepix.ChavePixValidatorRequest
+import br.com.zup.academy.chavepix.cadastro.CadastroChavePixValidatorRequest
 
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.validation.validator.constraints.ConstraintValidator
@@ -24,10 +24,10 @@ annotation class ValidPixKey(
 )
 
 @Singleton
-class ValidPixKeyValidator : ConstraintValidator <ValidPixKey, ChavePixValidatorRequest>  {
+class ValidPixKeyValidator : ConstraintValidator <ValidPixKey, CadastroChavePixValidatorRequest>  {
 
     override fun isValid(
-        value: ChavePixValidatorRequest,
+        value: CadastroChavePixValidatorRequest,
         annotationMetadata: AnnotationValue<ValidPixKey>,
         context: ConstraintValidatorContext
     ): Boolean {

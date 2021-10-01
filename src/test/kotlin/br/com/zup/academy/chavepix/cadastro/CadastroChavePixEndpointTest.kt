@@ -1,9 +1,7 @@
-package br.com.zup.academy.chavepix
+package br.com.zup.academy.chavepix.cadastro
 
-import br.com.zup.academy.ChavePixRequest
-import br.com.zup.academy.ChavePixServiceGrpc
-import br.com.zup.academy.TipoChave
-import br.com.zup.academy.TipoConta
+import br.com.zup.academy.*
+import br.com.zup.academy.chavepix.ChavePixRepository
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
@@ -16,9 +14,9 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 
 @MicronautTest(transactional = false)
-internal class ChavePixEndpointTest(
+internal class CadastroChavePixEndpointTest(
     val chavePixRepository: ChavePixRepository,
-    val grpcClient: ChavePixServiceGrpc.ChavePixServiceBlockingStub
+    val grpcClient: CadastrarChavePixServiceGrpc.CadastrarChavePixServiceBlockingStub
 
 ) {
 
@@ -35,7 +33,7 @@ internal class ChavePixEndpointTest(
     @Test
     fun `deve cadastrar chave pix com sucesso com os dados atendendo os requisitos`() {
 
-        val chavePixRequest = ChavePixRequest.newBuilder()
+        val chavePixRequest = CadastroChavePixRequest.newBuilder()
             .setIdCliente("c56dfef4-7901-44fb-84e2-a2cefb157890")
             .setTipoChave(TipoChave.CPF)
             .setValorChave("02467781054")
@@ -49,7 +47,7 @@ internal class ChavePixEndpointTest(
     @Test
     fun `nao deve cadastrar chave pix ja cadastrada e deve retornar status ALREADY_EXISTS`() {
 
-        val chavePixRequest = ChavePixRequest.newBuilder()
+        val chavePixRequest = CadastroChavePixRequest.newBuilder()
             .setIdCliente("c56dfef4-7901-44fb-84e2-a2cefb157890")
             .setTipoChave(TipoChave.CPF)
             .setValorChave("02467781054")
@@ -57,7 +55,7 @@ internal class ChavePixEndpointTest(
             .build()
 
         grpcClient.cadastrar(chavePixRequest)
-        val error = assertThrows<StatusRuntimeException> {
+        val error = org.junit.jupiter.api.assertThrows<StatusRuntimeException> {
             val cadastroResponse = grpcClient.cadastrar(chavePixRequest)
         }
         with(error) {
@@ -70,14 +68,14 @@ internal class ChavePixEndpointTest(
     @Test
     fun `nao deve cadastrar chave pix com clientId inexistente no ERP Itau e deve retornar status NOT_FOUND`() {
 
-        val chavePixRequest = ChavePixRequest.newBuilder()
+        val chavePixRequest = CadastroChavePixRequest.newBuilder()
             .setIdCliente("c56dfef4-7901-44fb-84e2-a2cefb157891")
             .setTipoChave(TipoChave.CPF)
             .setValorChave("02467781054")
             .setTipoConta(TipoConta.CONTA_CORRENTE)
             .build()
 
-        val error = assertThrows<StatusRuntimeException> {
+        val error = org.junit.jupiter.api.assertThrows<StatusRuntimeException> {
             val cadastroResponse = grpcClient.cadastrar(chavePixRequest)
         }
         with(error) {
@@ -89,14 +87,14 @@ internal class ChavePixEndpointTest(
     @Test
     fun `nao deve cadastrar chave pix com clientId em formato incorreto e deve retornar status INVALID_ARGUMENT`() {
 
-        val chavePixRequest = ChavePixRequest.newBuilder()
+        val chavePixRequest = CadastroChavePixRequest.newBuilder()
             .setIdCliente("sas6s1a1")
             .setTipoChave(TipoChave.CPF)
             .setValorChave("02467781054")
             .setTipoConta(TipoConta.CONTA_CORRENTE)
             .build()
 
-        val error = assertThrows<StatusRuntimeException> {
+        val error = org.junit.jupiter.api.assertThrows<StatusRuntimeException> {
             val cadastroResponse = grpcClient.cadastrar(chavePixRequest)
         }
         with(error) {
@@ -108,20 +106,20 @@ internal class ChavePixEndpointTest(
     @Test
     fun `nao deve cadastrar chave pix tipo CPF invalida  e deve retornar status INVALID_ARGUMENT`() {
 
-        val chavePixRequest = ChavePixRequest.newBuilder()
+        val chavePixRequest = CadastroChavePixRequest.newBuilder()
             .setIdCliente("c56dfef4-7901-44fb-84e2-a2cefb157890")
             .setTipoChave(TipoChave.CPF)
             .setValorChave("0246sd7781054")
             .setTipoConta(TipoConta.CONTA_CORRENTE)
             .build()
 
-        val error = assertThrows<StatusRuntimeException> {
+        val error = org.junit.jupiter.api.assertThrows<StatusRuntimeException> {
             val cadastroResponse = grpcClient.cadastrar(chavePixRequest)
         }
         with(error) {
             assertEquals(Status.INVALID_ARGUMENT.code, this.status.code)
             println(this.status.description)
-           assertEquals(": chave PIX inválida", this.status.description)
+            assertEquals(": chave PIX inválida", this.status.description)
 
         }
     }
@@ -129,14 +127,14 @@ internal class ChavePixEndpointTest(
     @Test
     fun `nao deve cadastrar chave pix tipo EMAIL invalida  e deve retornar status INVALID_ARGUMENT`() {
 
-        val chavePixRequest = ChavePixRequest.newBuilder()
+        val chavePixRequest = CadastroChavePixRequest.newBuilder()
             .setIdCliente("c56dfef4-7901-44fb-84e2-a2cefb157890")
             .setTipoChave(TipoChave.EMAIL)
             .setValorChave("0246sd7781054")
             .setTipoConta(TipoConta.CONTA_CORRENTE)
             .build()
 
-        val error = assertThrows<StatusRuntimeException> {
+        val error = org.junit.jupiter.api.assertThrows<StatusRuntimeException> {
             val cadastroResponse = grpcClient.cadastrar(chavePixRequest)
         }
         with(error) {
@@ -150,14 +148,14 @@ internal class ChavePixEndpointTest(
     @Test
     fun `nao deve cadastrar chave pix tipo CELULAR invalida  e deve retornar status INVALID_ARGUMENT`() {
 
-        val chavePixRequest = ChavePixRequest.newBuilder()
+        val chavePixRequest = CadastroChavePixRequest.newBuilder()
             .setIdCliente("c56dfef4-7901-44fb-84e2-a2cefb157890")
             .setTipoChave(TipoChave.CELULAR)
             .setValorChave("0246sd7781054")
             .setTipoConta(TipoConta.CONTA_CORRENTE)
             .build()
 
-        val error = assertThrows<StatusRuntimeException> {
+        val error = org.junit.jupiter.api.assertThrows<StatusRuntimeException> {
             val cadastroResponse = grpcClient.cadastrar(chavePixRequest)
         }
         with(error) {
@@ -171,8 +169,8 @@ internal class ChavePixEndpointTest(
     @Factory
     class ClientsFactory {
         @Singleton
-        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): ChavePixServiceGrpc.ChavePixServiceBlockingStub {
-            return ChavePixServiceGrpc.newBlockingStub(channel)
+        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): CadastrarChavePixServiceGrpc.CadastrarChavePixServiceBlockingStub {
+            return CadastrarChavePixServiceGrpc.newBlockingStub(channel)
         }
     }
 }

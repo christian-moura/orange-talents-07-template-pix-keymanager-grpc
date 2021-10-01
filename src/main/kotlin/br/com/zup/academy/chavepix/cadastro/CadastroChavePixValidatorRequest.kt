@@ -1,5 +1,7 @@
-package br.com.zup.academy.chavepix
+package br.com.zup.academy.chavepix.cadastro
 
+import br.com.zup.academy.chavepix.ChavePix
+import br.com.zup.academy.chavepix.TipoChave
 import br.com.zup.academy.conta.Conta
 import br.com.zup.academy.conta.TipoConta
 import br.com.zup.academy.shared.validation.ValidPixKey
@@ -13,7 +15,7 @@ import javax.validation.constraints.Size
 
 @ValidPixKey
 @Introspected
-data class ChavePixValidatorRequest(
+data class CadastroChavePixValidatorRequest(
     @field:ValidUUID
     @field:NotBlank
     val clienteId: String?,
@@ -25,7 +27,7 @@ data class ChavePixValidatorRequest(
     val tipoDeConta: TipoConta
 ) {
 
-    fun toChavePix(conta: Conta):ChavePix{
+    fun toChavePix(conta: Conta): ChavePix {
         return ChavePix(
             conta,
             this.tipo,

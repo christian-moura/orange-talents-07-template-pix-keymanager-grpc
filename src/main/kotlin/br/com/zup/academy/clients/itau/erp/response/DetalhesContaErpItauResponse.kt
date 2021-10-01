@@ -4,6 +4,7 @@ import br.com.zup.academy.conta.Conta
 import br.com.zup.academy.conta.InstituicaoRepository
 import br.com.zup.academy.conta.TipoConta
 import br.com.zup.academy.conta.TitularRepository
+import java.util.*
 
 data class DetalhesContaErpItauResponse(
     val tipo: String,
@@ -18,7 +19,7 @@ data class DetalhesContaErpItauResponse(
 
     fun toConta(instituicaoRepository: InstituicaoRepository, titularRepository: TitularRepository): Conta {
         val existeIntituicao = instituicaoRepository.findById(this.instituicao.ispb)
-        val existeTitular = titularRepository.findById(this.titular.cpf)
+        val existeTitular = titularRepository.findById(UUID.fromString(this.titular.id))
         val instituicao =
             if (existeIntituicao.isPresent) existeIntituicao.get() else instituicaoRepository.saveAndFlush(this.instituicao.toInstituicao())
         val titular =
