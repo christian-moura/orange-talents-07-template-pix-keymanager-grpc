@@ -139,7 +139,6 @@ internal class CadastroChavePixEndpointTest(
         }
         with(error) {
             assertEquals(Status.INVALID_ARGUMENT.code, this.status.code)
-            println(this.status.description)
             assertEquals(": chave PIX inválida", this.status.description)
 
         }
@@ -160,7 +159,6 @@ internal class CadastroChavePixEndpointTest(
         }
         with(error) {
             assertEquals(Status.INVALID_ARGUMENT.code, this.status.code)
-            println(this.status.description)
             assertEquals(": chave PIX inválida", this.status.description)
 
         }
@@ -181,8 +179,27 @@ internal class CadastroChavePixEndpointTest(
         }
         with(error) {
             assertEquals(Status.INVALID_ARGUMENT.code, this.status.code)
-            println(this.status.description)
             assertEquals(": chave PIX inválida", this.status.description)
+
+        }
+    }
+
+    @Test
+    fun `nao deve cadastrar chave pix com retorno direferente de 201 do BCB e deve retornar INTERNAL`() {
+
+        val chavePixRequest = CadastroChavePixRequest.newBuilder()
+            .setIdCliente("c56dfef4-7901-44fb-84e2-a2cefb157890")
+            .setTipoChave(TipoChave.CPF)
+            .setValorChave("02467781054")
+            .setTipoConta(TipoConta.CONTA_CORRENTE)
+            .build()
+
+        val error = assertThrows<StatusRuntimeException> {
+            val cadastroResponse = grpcClient.cadastrar(chavePixRequest)
+        }
+        with(error) {
+            assertEquals(Status.INTERNAL.code, this.status.code)
+            assertEquals("Erro ao registrar chave Pix no Banco Central do Brasil (BCB)", this.status.description)
 
         }
     }

@@ -97,7 +97,6 @@ internal class ExcluirChavePixEndpointTest(
     }
 
     @Test
-    @Transactional
     fun ` não deve excluir chave pix inexistente e deve retornar status NOT_FOUND`() {
         val exclusaoChavePixRequest = ExcluirChavePixRequest.newBuilder()
             .setIdCliente("c56dfef4-7901-44fb-84e2-a2cefb157890")
@@ -112,6 +111,8 @@ internal class ExcluirChavePixEndpointTest(
             assertEquals("Chave pix não encontrada pelo id: ${exclusaoChavePixRequest.idPix} ", this.status.description)
         }
     }
+
+
     fun `não deve excluir chave pix com clientId diferente do titular e deve retornar status PERMISSION_DENIED`() {
 
         val instituicao = Instituicao("ITAÚ UNIBANCO S.A.", "60701190")
@@ -150,6 +151,23 @@ internal class ExcluirChavePixEndpointTest(
             assertEquals("Permissão negada para o recurso.", this.status.description)
         }
 
+    }
+
+    @Test
+    fun ` não deve excluir chave pix com retorno direferente de 200 do BCB e deve retornar INTERNAL`() {
+        val exclusaoChavePixRequest = ExcluirChavePixRequest.newBuilder()
+            .setIdCliente("c56dfef4-7901-44fb-84e2-a2cefb157890")
+            .setIdPix("5260263c-a3c1-4727-ae32-3bdb2538841b")
+            .build()
+
+        val error = org.junit.jupiter.api.assertThrows<StatusRuntimeException> {
+            val exclusaoResponse = grpcExcluirClient.excluir(exclusaoChavePixRequest)
+        }
+        with(error) {
+            assertEquals(Status.INTERNAL.code, this.status.code)
+            assertEquals("Erro ao remover chave Pix no Banco Central do Brasil (BCB)", this.status.description)
+
+        }
     }
 
     @Factory
