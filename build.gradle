@@ -43,7 +43,9 @@ dependencies {
     implementation("io.micronaut.beanvalidation:micronaut-hibernate-validator")
 
 
+    implementation("io.micronaut.xml:micronaut-jackson-xml")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+
 
     testImplementation('io.micronaut:micronaut-http-client:3.0.1')
 

@@ -9,12 +9,10 @@ class Titular(
     @Column(nullable = false) val cpf: String,
     @Id val id: UUID,
 ) {
-    @OneToMany(mappedBy = "titular", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "titular", fetch = FetchType.EAGER)
     var contas: List<Conta>? = null
 
     override fun toString(): String {
         return "Titular(nome='$nome', cpf='$cpf', id=$id)"
     }
-
-
 }

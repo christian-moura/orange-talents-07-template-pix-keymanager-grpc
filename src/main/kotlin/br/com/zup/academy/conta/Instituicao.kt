@@ -7,7 +7,7 @@ class Instituicao(
     @Column(nullable = false) val nome: String,
     @Id val ispb: String,
 ) {
-    @OneToMany(mappedBy = "instituicao", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "instituicao", fetch = FetchType.EAGER)
     var contas: List<Conta>? = null
 
     override fun toString(): String {

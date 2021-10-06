@@ -26,6 +26,11 @@ itau:
     url: ${ITAU_URL:`http://localhost:9091/api/v1`}
 
 
+bacen:
+  pix:
+    url: ${BACEN_URL:`http://localhost:8082/api/v1`}
+
+
 
 #datasources:
 #  default:

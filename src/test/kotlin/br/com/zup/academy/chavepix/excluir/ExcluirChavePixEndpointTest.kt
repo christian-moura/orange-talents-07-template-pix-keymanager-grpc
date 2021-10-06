@@ -18,6 +18,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 import javax.transaction.Transactional
 
@@ -79,19 +80,19 @@ internal class ExcluirChavePixEndpointTest(
 
 
     @Test
-    @Transactional
+
     fun ` não deve excluir chave pix com ID pix inválido e deve retornar status INVALID_ARGUMENT`() {
         val exclusaoChavePixRequest = ExcluirChavePixRequest.newBuilder()
             .setIdCliente("c56dfef4-7901-44fb-84e2-a2cefb157890")
             .setIdPix("02467781054")
             .build()
 
-        val error = org.junit.jupiter.api.assertThrows<StatusRuntimeException> {
+        val error = assertThrows<StatusRuntimeException> {
             val exclusaoResponse = grpcExcluirClient.excluir(exclusaoChavePixRequest)
         }
         with(error) {
             assertEquals(Status.INVALID_ARGUMENT.code, this.status.code)
-            assertEquals("Chave pix não encontrada pelo id: ${exclusaoChavePixRequest.idPix} ", this.status.description)
+            assertEquals("excluirChavePix.pixIdRequest: não é um formato válido de UUID", this.status.description)
         }
     }
 

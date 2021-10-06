@@ -6,11 +6,11 @@ import javax.persistence.*
 
 @Entity
 class ChavePix(
-    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     val conta: Conta,
     @Enumerated(EnumType.STRING)
     @Column(nullable = false) val tipoChave: TipoChave,
-    @Column(nullable = false) val valorChave: String,
+    @Column(nullable = false) var valorChave: String,
 ) {
     @Id @GeneratedValue
     var id: UUID? = null

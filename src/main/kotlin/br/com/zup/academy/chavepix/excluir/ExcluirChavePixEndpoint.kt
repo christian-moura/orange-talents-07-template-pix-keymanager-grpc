@@ -47,6 +47,15 @@ class ExcluirChavePixEndpoint(
                     .asRuntimeException()
             )
             return
+        } catch (illegalStateException: IllegalStateException) {
+            responseObserver.onError(
+                Status.INTERNAL
+                    .withDescription(
+                        illegalStateException.message
+                    )
+                    .asRuntimeException()
+            )
+            return
         }
     }
 }

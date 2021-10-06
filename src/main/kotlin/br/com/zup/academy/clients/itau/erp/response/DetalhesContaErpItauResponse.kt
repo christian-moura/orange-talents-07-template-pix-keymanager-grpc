@@ -13,9 +13,16 @@ data class DetalhesContaErpItauResponse(
     val numero: String,
     var titular: TitularResponse
 ) {
-    override fun toString(): String {
-        return "DetalhesContaErpItauResponse(tipo='$tipo', instituicao=$instituicao, agencia='$agencia', numero='$numero', titular=$titular)"
-    }
+
+//    fun toConta(): Conta {
+//        return Conta(
+//            TipoConta.valueOf(this.tipo),
+//            this.instituicao.toInstituicao(),
+//            this.agencia,
+//            this.numero,
+//            this.titular.toTitular()
+//        )
+//    }
 
     fun toConta(instituicaoRepository: InstituicaoRepository, titularRepository: TitularRepository): Conta {
         val existeIntituicao = instituicaoRepository.findById(this.instituicao.ispb)
