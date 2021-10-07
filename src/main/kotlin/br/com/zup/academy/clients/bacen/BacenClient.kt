@@ -2,6 +2,9 @@ package br.com.zup.academy.clients.bacen
 
 import br.com.zup.academy.chavepix.ChavePix
 import br.com.zup.academy.chavepix.TipoChave
+import br.com.zup.academy.chavepix.excluir.ChavePixInformacao
+import br.com.zup.academy.conta.Conta
+import br.com.zup.academy.conta.Instituicao
 import br.com.zup.academy.conta.TipoConta
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
@@ -28,11 +31,11 @@ interface BacenClient {
     )
     fun delete(@PathVariable key: String, @Body request: DeletePixKeyRequest): HttpResponse<DeletePixKeyResponse>
 
-//    @Get(
-//        "/pix/keys/{key}",
-//        consumes = [MediaType.APPLICATION_XML]
-//    )
-//    fun findByKey(@PathVariable key: String): HttpResponse<PixKeyDetailsResponse>
+    @Get(
+        "/pix/keys/{key}",
+        consumes = [MediaType.APPLICATION_XML]
+    )
+    fun findByKey(@PathVariable key: String): HttpResponse<PixKeyDetailsResponse>
 
 }
 
@@ -75,33 +78,26 @@ data class CreatePixKeyRequest(
         }
     }
 }
-//
-//data class PixKeyDetailsResponse(
-//    val keyType: PixKeyType,
-//    val key: String,
-//    val bankAccount: BankAccount,
-//    val owner: Owner,
-//    val createdAt: LocalDateTime
-//) {
-//
-//    fun toModel(): ChavePixInfo {
-//        return ChavePixInfo(
-//            tipo = keyType.domainType!!,
-//            chave = this.key,
-//            tipoDeConta = when (this.bankAccount.accountType) {
-//                BankAccount.AccountType.CACC -> TipoDeConta.CONTA_CORRENTE
-//                BankAccount.AccountType.SVGS -> TipoDeConta.CONTA_POUPANCA
-//            },
-//            conta = ContaAssociada(
-//                instituicao = Instituicoes.nome(bankAccount.participant),
-//                nomeDoTitular = owner.name,
-//                cpfDoTitular = owner.taxIdNumber,
-//                agencia = bankAccount.branch,
-//                numeroDaConta = bankAccount.accountNumber
-//            )
-//        )
-//    }
-//}
+
+data class PixKeyDetailsResponse(
+    val keyType: PixKeyType,
+    val key: String,
+    val bankAccount: BankAccount,
+    val owner: Owner,
+    val createdAt: LocalDateTime
+) {
+
+    fun toModel(): ChavePixInformacao {
+        return ChavePixInformacao(
+            tipo = keyType.domainType!!,
+            chave = this.key,
+            tipoDeConta = when (this.bankAccount.accountType) {
+                BankAccount.AccountType.CACC -> TipoConta.CONTA_CORRENTE
+                BankAccount.AccountType.SVGS -> TipoConta.CONTA_POUPANCA
+            }
+        )
+    }
+}
 
 data class CreatePixKeyResponse(
     val keyType: PixKeyType,
